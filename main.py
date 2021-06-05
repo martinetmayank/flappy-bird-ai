@@ -8,9 +8,12 @@ import neat
 from bird import Bird
 from pipe import Pipe
 
+pygame.font.init()
+
 WIN_WIDTH = 500
 WIN_HEIGHT = 800
 
+STAT_FONT = pygame.font.SysFont('comicsans', 50)
 
 BG_IMG = pygame.transform.scale2x(
     pygame.image.load(
@@ -19,14 +22,18 @@ BG_IMG = pygame.transform.scale2x(
 )
 
 
-def draw_window(window, bird, pipes, base):
+def draw_window(window, bird, pipes, base, score):
     window.blit(BG_IMG, (0, 0))
 
     for pipe in pipes:
         pipe.draw(window)
 
+    text = STAT_FONT.render(f'Score {score}', 1, (255, 255, 255))
+    window.blit(text, (WIN_WIDTH - 10 - text.get_width(), 10))
+
     base.draw(window)
     bird.draw(window)
+
     pygame.display.update()
 
 
@@ -73,9 +80,10 @@ def main():
 
         base.move()
 
-        draw_window(window, bird, pipes, base)
+        draw_window(window, bird, pipes, base, score)
     pygame.quit()
     quit()
 
 
-main()
+if __name__ == "__main__":
+    main()
