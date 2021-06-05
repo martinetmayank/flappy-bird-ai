@@ -33,10 +33,12 @@ def draw_window(window, bird, pipes, base):
 def main():
     bird = Bird(230, 350)
     base = Base(730)
-    pipes = [Pipe(700)]
+    pipes = [Pipe(600)]
     window = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
     run = True
     clock = pygame.time.Clock()
+
+    score = 0
 
     while run:
         clock.tick(30)
@@ -45,9 +47,32 @@ def main():
                 run = False
 
         # bird.move()
+        removed_pipe = list()
+        add_pipe = False
+
         for pipe in pipes:
+            if pipe.collide(bird):
+                pass
+            if pipe.x + pipe.PIPE_TOP.get_width() < 0:
+                removed_pipe.append(pipe)
+
+            if not pipe.passed and pipe.x < bird.x:
+                pipe.passed = True
+                add_pipe = True
             pipe.move()
+
+        if add_pipe is True:
+            score += 1
+            pipes.append(Pipe(600))
+
+        for pipe in removed_pipe:
+            pipes.remove(pipe)
+
+        if bird.y + bird.img.get_height() >= 730:
+            pass
+
         base.move()
+
         draw_window(window, bird, pipes, base)
     pygame.quit()
     quit()
